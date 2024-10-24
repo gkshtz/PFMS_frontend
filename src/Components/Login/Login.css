@@ -1,0 +1,40 @@
+.formContainer{
+    margin: auto;
+    width: 40vw; 
+    height: 35vh;
+    text-align: center;
+    padding-top: 8vh;
+    border: 5px solid black;
+    border-radius: 12px;
+    background-color: antiquewhite;
+}
+.label{
+    margin: 3px;
+    font-weight: bold;
+    font-size: large;
+    font-family: cursive;
+    color: brown;
+}
+#formTitle{
+    margin: 3px;
+    font-size: 1.8em;
+    color: black;
+    font-weight: bold;
+    font-family: cursive;
+}
+.inputField{
+    margin: 3px;
+    border: 2px solid black;
+    width: 20em;
+    height: 1.5em;
+    border-radius: 5px;
+}
+#submit{
+    margin: 3px;
+    margin: 3px;
+    width: 8em;
+    height: 1.8em;
+    background-color: grey;
+    color: whitesmoke;
+    font-weight: bolder;
+}

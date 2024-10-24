@@ -1,0 +1,9 @@
+.transaction-card{
+    margin: 1em;
+    border: 5px solid purple;
+}
+.row{
+    text-align: left;
+    border: 0.1em solid grey;
+    margin: 0px;
+}
