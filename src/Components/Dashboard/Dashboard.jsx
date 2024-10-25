@@ -1,32 +1,33 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import TransactionCard from '../TransactionCard/TransactionCard'
 import { LoginContext } from '../../Contexts/LoginContext'
 
 export default function Dashboard() {
   const loginContext = useContext(LoginContext);
-  let transactions;
+  const [transactions, setTransactions] = useState([]);
   useEffect(()=>{
     async function fetchTransactions()
     {
       const token = loginContext.jwt;
       const response = await fetch('http://localhost:5144/api/transactions', {
         method:'GET',
-        headers: {
-          Authorization: token,
-          'Content-Type': 'application/json'
+        headers:{
+          Authorization: `Bearer ${token}`
         }
       });
       if(response.ok)
       {
         const responseData = await response.json();
-        transactions = responseData.responseData;
+        console.log("->",responseData);
+        setTransactions(responseData.responseData);
+        console.log("transactions->",transactions, transactions.length);
       }
     }
     fetchTransactions();
   },[])
   return (
     <div>   
-      {transactions ? 
+      {transactions.length>0 ?
         transactions.map((transaction) => (
           <TransactionCard transaction={transaction}/>
         )) 
