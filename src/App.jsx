@@ -1,13 +1,18 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
+import { useContext } from 'react'
+import { LoginContext } from './Contexts/LoginContext.jsx'
 
 function App() {
+  const {isAuthenticated} = useContext(LoginContext);
+    
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Login></Login>
+      element: isAuthenticated? <Navigate to='/dashboard' />: <Navigate to='/login' />
     },
     {
       path: '/login',
