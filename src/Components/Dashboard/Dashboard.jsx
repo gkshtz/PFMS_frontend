@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import TransactionCard from '../TransactionCard/TransactionCard'
 import { LoginContext } from '../../Contexts/LoginContext'
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const loginContext = useContext(LoginContext);
   const [transactions, setTransactions] = useState([]);
   useEffect(()=>{
@@ -18,15 +20,15 @@ export default function Dashboard() {
       if(response.ok)
       {
         const responseData = await response.json();
-        console.log("->",responseData);
         setTransactions(responseData.responseData);
-        console.log("transactions->",transactions, transactions.length);
       }
     }
     fetchTransactions();
   },[])
+
   return (
     <div>   
+      <button id='addTransactionBtn' onClick={()=>{navigate('/add-transaction')}}>Add Transaction</button>
       {transactions.length>0 ?
         transactions.map((transaction) => (
           <TransactionCard transaction={transaction}/>

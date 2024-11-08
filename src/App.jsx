@@ -5,6 +5,7 @@ import Dashboard from './Components/Dashboard/Dashboard.jsx'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
 import { useContext } from 'react'
 import { LoginContext } from './Contexts/LoginContext.jsx'
+import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
 
 function App() {
   const {isAuthenticated} = useContext(LoginContext);
@@ -21,6 +22,10 @@ function App() {
     {
       path: '/dashboard',
       element: <ProtectedRoute><Dashboard /></ProtectedRoute>
+    },
+    {
+      path: '/add-transaction',
+      element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
     }
   ])
 
