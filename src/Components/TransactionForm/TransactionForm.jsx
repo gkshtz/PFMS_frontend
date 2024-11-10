@@ -1,29 +1,95 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { LoginContext } from '../../Contexts/LoginContext';
 
 export default function TransactionForm() 
 {
     const initialData = {
         transactionName: "",
         transactionDescription: "",
-        transactionAmount: "",
+        transactionAmount: 0,
         transactionDate: "",
         transactionType: ""
     }
 
+    const loginContext = useContext(LoginContext);
     const [formData, setFormData] = useState(initialData);
+    const [loaded, setLoaded] = useState(false);
+    const [isFetched, setFetched] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    async function onSubmit(event)
+    {
+        event.preventDefault();
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization",`Bearer ${loginContext.jwt}`);
+
+        console.log("type ", typeof formData.transactionType);
+        console.log("amount ", typeof formData.transactionAmount);
+
+        const response = await fetch('http://localhost:5144/api/transactions', {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            headers: myHeaders            
+        });
+
+        if(response.status == 201)
+        {
+            alert("Transaction Added successfully");
+        }
+    }
 
     function handleChange(event)
     {
-        const {name, value} = event.target;
+        let {name, value} = event.target;
+        if(name == "transactionType" || name == "transactionAmount")
+        {
+            value = Number(value);
+        }
         setFormData({
             ...formData,
             [name]: value
         });
     }
+
+    async function fetchCategories()
+    {
+        const requestHeaders = new Headers();
+        requestHeaders.append('Content-Type', 'application/json');
+        requestHeaders.append('Authorization', `Bearer ${loginContext.jwt}`)
+        try
+        {
+            const response = await fetch('http://localhost:5144/api/categories', {
+                method: 'GET',
+                headers: requestHeaders
+            })
+
+            if(response.ok)
+            {
+                const payload = await response.json();
+                setCategories(payload.responseData);
+                setFetched(true);
+                setLoaded(true);
+            }
+        }
+        catch
+        {
+            alert('Something went wrong')
+        }
+    }
+
+    async function handleFocus()
+    {
+        if(isFetched == false)
+        {
+            await fetchCategories();
+        }
+    }
   return (
     <div className="formContainer">
       <div id="formTitle">Add New Transaction</div>
-            <form>
+            <form onSubmit={onSubmit}>
                 <div className='label'>
                     <label htmlFor="transactionName">Enter Transaction Name</label>
                 </div>
@@ -54,6 +120,18 @@ export default function TransactionForm()
                     <label>Income</label>
                     <input type="radio" name="transactionType" value={1} onChange={handleChange}/>
                 </div>
+
+                <div>
+                    <select onFocus={handleFocus}>
+                        <option value="">Select Category</option>
+                        {loaded? 
+                        categories.map((category)=>
+                        <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>)
+                        :
+                        <option>Loading...</option>}
+                    </select>
+                </div>
+
                 <input type="submit" value="Submit" id='submit'></input>
             </form>
     </div>
