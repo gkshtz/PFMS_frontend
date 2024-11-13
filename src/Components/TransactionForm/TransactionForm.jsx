@@ -8,14 +8,17 @@ export default function TransactionForm()
         transactionDescription: "",
         transactionAmount: 0,
         transactionDate: "",
-        transactionType: ""
+        transactionType: 0
     }
 
     const loginContext = useContext(LoginContext);
     const [formData, setFormData] = useState(initialData);
     const [loaded, setLoaded] = useState(false);
-    const [isFetched, setFetched] = useState(false);
+    const [isFetched0, setFetched0] = useState(false);
+    const [isFetched1, setFetched1] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [categories0, setCategories0] = useState([]);
+    const [categories1, setCategories1] = useState([]);
 
     async function onSubmit(event)
     {
@@ -60,7 +63,7 @@ export default function TransactionForm()
         requestHeaders.append('Authorization', `Bearer ${loginContext.jwt}`)
         try
         {
-            const response = await fetch('http://localhost:5144/api/categories', {
+            const response = await fetch(`http://localhost:5144/api/categories/${formData.transactionType}`, {
                 method: 'GET',
                 headers: requestHeaders
             })
@@ -68,23 +71,49 @@ export default function TransactionForm()
             if(response.ok)
             {
                 const payload = await response.json();
-                setCategories(payload.responseData);
-                setFetched(true);
-                setLoaded(true);
+                const data = payload.responseData;
+                return data;
             }
         }
         catch
         {
-            alert('Something went wrong')
+            alert('Something went wrong');
+            return [];
         }
     }
 
     async function handleFocus()
     {
-        if(isFetched == false)
+        setLoaded(false);
+        if(formData.transactionType == 0)
         {
-            await fetchCategories();
+            if(!isFetched0)
+            {
+                const data = await fetchCategories();
+                setCategories0(data);
+                setCategories(data);
+                setFetched0(true);
+            }
+            else
+            {
+                setCategories(categories0);
+            }
         }
+        else if(formData.transactionType == 1)
+        {
+            if(!isFetched1)
+            {
+                const data = await fetchCategories();
+                setCategories1(data);
+                setCategories(data);
+                setFetched1(true);
+            }
+            else
+            {
+                setCategories(categories1);
+            }
+        }
+        setLoaded(true);
     }
   return (
     <div className="formContainer">
