@@ -7,6 +7,7 @@ export default function TransactionForm()
         transactionName: "",
         transactionDescription: "",
         transactionAmount: 0,
+        categoryId: '',
         transactionDate: "",
         transactionType: 0
     }
@@ -151,9 +152,10 @@ export default function TransactionForm()
                 </div>
 
                 <div>
-                    <select onFocus={handleFocus}>
+                    <select value={formData.categoryId} onChange={handleChange} onFocus={handleFocus}>
                         <option value="">Select Category</option>
                         {loaded? 
+                        /* In React, the key attribute is required when rendering lists, including dropdown options, to improve performance and avoid rendering issues but it’s not submitted with the form data. Only the value attribute is submitted.*/
                         categories.map((category)=>
                         <option key={category.categoryId} value={category.categoryId}>{category.categoryName}</option>)
                         :
