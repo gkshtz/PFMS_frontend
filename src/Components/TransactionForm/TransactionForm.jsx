@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 import { LoginContext } from '../../Contexts/LoginContext';
 
 export default function TransactionForm() 
@@ -7,7 +7,7 @@ export default function TransactionForm()
         transactionName: "",
         transactionDescription: "",
         transactionAmount: 0,
-        categoryId: '',
+        transactionCategoryId: '',
         transactionDate: "",
         transactionType: 0
     }
@@ -31,6 +31,9 @@ export default function TransactionForm()
 
         console.log("type ", typeof formData.transactionType);
         console.log("amount ", typeof formData.transactionAmount);
+        console.log("time", formData.transactionDate);
+        console.log(formData);
+        
 
         const response = await fetch('http://localhost:5144/api/transactions', {
             method: 'POST',
@@ -51,6 +54,8 @@ export default function TransactionForm()
         {
             value = Number(value);
         }
+        console.log(name);
+        
         setFormData({
             ...formData,
             [name]: value
@@ -152,8 +157,8 @@ export default function TransactionForm()
                 </div>
 
                 <div>
-                    <select value={formData.categoryId} onChange={handleChange} onFocus={handleFocus}>
-                        <option value="">Select Category</option>
+                    <select name='transactionCategoryId' value={formData.categoryId} onChange={handleChange} onFocus={handleFocus}>
+                        <option key={0} value="">Select Category</option>
                         {loaded? 
                         /* In React, the key attribute is required when rendering lists, including dropdown options, to improve performance and avoid rendering issues but it’s not submitted with the form data. Only the value attribute is submitted.*/
                         categories.map((category)=>
