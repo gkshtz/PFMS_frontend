@@ -7,3 +7,10 @@
     border: 0.1em solid grey;
     margin: 0px;
 }
+#deleteButton{
+    border: 2px solid grey;
+    background-color: red;
+    color: black;
+    border-radius: 7px;
+    margin: 2px;
+}
