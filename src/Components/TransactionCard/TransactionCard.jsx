@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import './TransactionCard.css';
 import { LoginContext } from '../../Contexts/LoginContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function TransactionCard(props) 
 {
 
   const loginContext = useContext(LoginContext);
-  
   const handleDeleteClick = async ()=>{
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -18,6 +18,7 @@ export default function TransactionCard(props)
     if(response.ok)
     {
       alert('Transaction Deleted Successfully');
+      props.setDeletedIndex(props.index);
     }
   }
   return (

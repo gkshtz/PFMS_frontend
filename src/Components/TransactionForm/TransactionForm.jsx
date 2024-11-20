@@ -29,12 +29,6 @@ export default function TransactionForm()
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization",`Bearer ${loginContext.jwt}`);
 
-        console.log("type ", typeof formData.transactionType);
-        console.log("amount ", typeof formData.transactionAmount);
-        console.log("time", formData.transactionDate);
-        console.log(formData);
-        
-
         const response = await fetch('http://localhost:5144/api/transactions', {
             method: 'POST',
             body: JSON.stringify(formData),
