@@ -20,7 +20,7 @@ function App()
       loginContext.setJwt(token); 
     }
     else
-    {  
+    {       
       loginContext.setAuthenticationStatus(false);
     }
 
@@ -46,7 +46,7 @@ function App()
     return (
       <div>
         {
-          loginContext.isAuthenticated && <RouterProvider router={router}></RouterProvider>
+          loginContext.isAuthenticated!==null && <RouterProvider router={router}></RouterProvider>
         }
       </div>
     )
