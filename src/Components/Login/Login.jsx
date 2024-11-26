@@ -28,7 +28,7 @@ const Login = ()=>{
             const payload = await response.json();
             loginContext.setAuthenticationStatus(true);
             loginContext.setJwt(payload.responseData);
-            console.log(payload.responseData);
+            localStorage.setItem('jwt-token', payload.responseData);
             navigate('/dashboard');
         }
     }

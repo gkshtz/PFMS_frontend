@@ -8,33 +8,48 @@ import { LoginContext } from './Contexts/LoginContext.jsx'
 import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
 
-function App() {
-  const {isAuthenticated} = useContext(LoginContext);
-    
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: isAuthenticated? <Dashboard/>: <Navigate to='/login' />
-    },
-    {
-      path: '/login',
-      element: <Login/>
-    },
-    {
-      path: '/transactions',
-      element: <ProtectedRoute><TransactionList/></ProtectedRoute>
-    },
-    {
-      path: '/add-transaction',
-      element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
-    }
-  ])
+function App() 
+{
+    const loginContext = useContext(LoginContext);
 
-  return (
-    <div>
-      <RouterProvider router={router}></RouterProvider>
-    </div>
-  )
+    const token = localStorage.getItem('jwt-token')
+
+    if(token)
+    {
+      loginContext.setAuthenticationStatus(true);
+      loginContext.setJwt(token); 
+    }
+    else
+    {  
+      loginContext.setAuthenticationStatus(false);
+    }
+
+    const router = createBrowserRouter([
+      {
+        path: '/',
+        element: loginContext.isAuthenticated? <Dashboard/>: <Navigate to='/login' />
+      },
+      {
+        path: '/login',
+        element: <Login/>
+      },
+      {
+        path: '/transactions',
+        element: <ProtectedRoute><TransactionList/></ProtectedRoute>
+      },
+      {
+        path: '/add-transaction',
+        element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
+      }
+    ])
+
+    return (
+      <div>
+        {
+          loginContext.isAuthenticated && <RouterProvider router={router}></RouterProvider>
+        }
+      </div>
+    )
 }
 
 export default App
