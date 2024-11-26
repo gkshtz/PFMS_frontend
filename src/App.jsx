@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login.jsx'
-import Dashboard from './Components/Dashboard/Dashboard.jsx'
+import TransactionList from './Components/TransactionList/TransactionList.jsx'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
 import { useContext } from 'react'
 import { LoginContext } from './Contexts/LoginContext.jsx'
 import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
+import Dashboard from './Components/Dashboard/Dashboard.jsx'
 
 function App() {
   const {isAuthenticated} = useContext(LoginContext);
@@ -16,12 +17,16 @@ function App() {
       element: isAuthenticated? <Navigate to='/dashboard' />: <Navigate to='/login' />
     },
     {
+      path: '/dashboard',
+      element: <Dashboard></Dashboard>
+    },
+    {
       path: '/login',
       element: <Login/>
     },
     {
-      path: '/dashboard',
-      element: <ProtectedRoute><Dashboard /></ProtectedRoute>
+      path: '/transactions',
+      element: <ProtectedRoute><TransactionList/></ProtectedRoute>
     },
     {
       path: '/add-transaction',

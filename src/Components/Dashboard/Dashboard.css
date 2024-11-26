@@ -1,0 +1,17 @@
+.dashboardContainer{
+    height: 100vh;
+    background-color: yellow;
+    text-align: center;
+    padding-top: 6.5em;
+}
+.userTypeButton{
+    margin: 2em;
+    border: 0.2em solid black;
+    width: 20em;
+    height: 6em;
+    border-radius: 1em;
+    font-size: 1.8em;
+    background-color: blue;
+    color: white;
+    font-weight: bold;
+}   
