@@ -14,7 +14,7 @@ function App()
     const loginContext = useContext(LoginContext);
 
     useEffect(()=>{
-      const token = localStorage.getItem('jwt-token')||"nj";
+      const token = localStorage.getItem('jwt-token');
       if(token)
       {
         loginContext.setAuthenticationStatus(true);
