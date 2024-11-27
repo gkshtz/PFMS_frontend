@@ -3,31 +3,37 @@ import './App.css'
 import Login from './Components/Login/Login.jsx'
 import TransactionList from './Components/TransactionList/TransactionList.jsx'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute.jsx'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { LoginContext } from './Contexts/LoginContext.jsx'
 import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
+import AdminDashboard from './Components/AdminDashboard/AdminDashboard.jsx';
 
 function App() 
 {
     const loginContext = useContext(LoginContext);
 
-    const token = localStorage.getItem('jwt-token')
-
-    if(token)
-    {
-      loginContext.setAuthenticationStatus(true);
-      loginContext.setJwt(token); 
-    }
-    else
-    {       
-      loginContext.setAuthenticationStatus(false);
-    }
+    useEffect(()=>{
+      const token = localStorage.getItem('jwt-token')||"nj";
+      if(token)
+      {
+        loginContext.setAuthenticationStatus(true);
+        loginContext.setJwt(token);
+      }
+      else
+      {
+        loginContext.setAuthenticationStatus(false);
+      }
+    },[])
 
     const router = createBrowserRouter([
       {
         path: '/',
-        element: loginContext.isAuthenticated? <Dashboard/>: <Navigate to='/login' />
+        element: <ProtectedRoute><Dashboard/></ProtectedRoute>
+      },
+      {
+        path: 'admin-dashboard',
+        element: <ProtectedRoute><AdminDashboard/></ProtectedRoute>
       },
       {
         path: '/login',
@@ -46,7 +52,7 @@ function App()
     return (
       <div>
         {
-          loginContext.isAuthenticated!==null && <RouterProvider router={router}></RouterProvider>
+          loginContext.isAuthenticated!==undefined ? <RouterProvider router={router}></RouterProvider> : <div>Please wait</div>
         }
       </div>
     )

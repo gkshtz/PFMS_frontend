@@ -10,7 +10,7 @@ export default function Dashboard() {
         navigate('/transactions')
     }
     const handleAdminClick = ()=>{
-      navigate('/admin')
+      navigate('/admin-dashboard')
     }
   return (
     <div className='dashboardContainer'>

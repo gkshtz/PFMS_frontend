@@ -29,7 +29,7 @@ const Login = ()=>{
             loginContext.setAuthenticationStatus(true);
             loginContext.setJwt(payload.responseData);
             localStorage.setItem('jwt-token', payload.responseData);
-            navigate('/dashboard');
+            navigate('/transactions');
         }
     }
 
