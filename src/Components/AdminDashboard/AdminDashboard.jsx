@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { LoginContext } from '../../Contexts/LoginContext';
 import './AdminDashboard.css';
+import { Link } from 'react-router-dom';
 
 export default function AdminDashboard() 
 {
-
     const initialData = {
         roleId: '',
         userId: ''
@@ -72,7 +72,7 @@ export default function AdminDashboard()
 
     return (
         <div className='adminDashboard'>
-        <h2>Assign Role To User</h2>
+        <h1>Assign Role To User</h1>
         <form onSubmit={onSubmit}>        
                     <div>
                         <div className='roleLabel'>
@@ -98,6 +98,7 @@ export default function AdminDashboard()
                     </div>
                     <input type="submit" value="Submit" id='submit'></input>
                 </form>
+                <Link to='/add-user' id='linkToAddUser'>Add a new user</Link>
         </div>
     )
 }

@@ -32,3 +32,7 @@
     color: brown;
     font-weight: bolder;
 }
+#linkToAddUser{
+    text-decoration: underline;
+    font-weight: bold;
+}
