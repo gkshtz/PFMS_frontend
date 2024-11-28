@@ -7,7 +7,26 @@ export default function TransactionCard(props)
 {
 
   const loginContext = useContext(LoginContext);
+
   const handleDeleteClick = async ()=>{
+    let token = loginContext.jwt;
+        if(!checkAccessTokenValidity(token))
+        {
+            token = await refreshToken();
+            if(token)
+            {
+                loginContext.setJwt(token);
+                localStorage.setItem('access-token', token);
+            }
+            else
+            {
+                loginContext.setAuthenticationStatus(false);
+                loginContext.setJwt('');
+                localStorage.removeItem('access-token');
+                navigate('/login');
+            }
+        }
+
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization',`Bearer ${loginContext.jwt}`)
@@ -20,7 +39,13 @@ export default function TransactionCard(props)
       alert('Transaction Deleted Successfully');
       props.setDeletedIndex(props.index);
     }
+    else
+    {
+      const paylaod = await response.json();
+      alert(payload.errorName);
+    }
   }
+
   return (
     <div>
       <div className="transaction-card">

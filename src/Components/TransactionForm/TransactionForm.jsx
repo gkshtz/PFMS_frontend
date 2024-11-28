@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { LoginContext } from '../../Contexts/LoginContext';
+import { checkAccessTokenValidity, refreshToken } from '../../RefreshToken';
+import { useNavigate } from 'react-router-dom';
 
 export default function TransactionForm() 
 {
@@ -20,6 +22,8 @@ export default function TransactionForm()
     const [categories, setCategories] = useState([]);
     const [categories0, setCategories0] = useState([]);
     const [categories1, setCategories1] = useState([]);
+
+    const navigate = useNavigate();
 
     async function onSubmit(event)
     {
@@ -58,6 +62,24 @@ export default function TransactionForm()
 
     async function fetchCategories()
     {
+        let token = loginContext.jwt;
+        if(!checkAccessTokenValidity(token))
+        {
+            token = await refreshToken();
+            if(token)
+            {
+                loginContext.setJwt(token);
+                localStorage.setItem('access-token', token);
+            }
+            else
+            {
+                loginContext.setAuthenticationStatus(false);
+                loginContext.setJwt('');
+                localStorage.removeItem('access-token');
+                navigate('/login');
+            }
+        }
+        
         const requestHeaders = new Headers();
         requestHeaders.append('Content-Type', 'application/json');
         requestHeaders.append('Authorization', `Bearer ${loginContext.jwt}`)
@@ -85,6 +107,25 @@ export default function TransactionForm()
     async function handleFocus()
     {
         setLoaded(false);
+
+        let token = loginContext.jwt;
+        if(!checkAccessTokenValidity(token))
+        {
+            token = await refreshToken();
+            if(token)
+            {
+                loginContext.setJwt(token);
+                localStorage.setItem('access-token', token);
+            }
+            else
+            {
+                loginContext.setAuthenticationStatus(false);
+                loginContext.setJwt('');
+                localStorage.removeItem('access-token');
+                navigate('/login');
+            }
+        }
+        
         if(formData.transactionType == 0)
         {
             if(!isFetched0)

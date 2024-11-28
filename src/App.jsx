@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login.jsx'
 import TransactionList from './Components/TransactionList/TransactionList.jsx'
@@ -9,46 +9,62 @@ import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
 import AdminDashboard from './Components/AdminDashboard/AdminDashboard.jsx';
 import tokenNames from './Constants/TokenNames.js'
+import { checkAccessTokenValidity , refreshToken} from './RefreshToken.js'
 
 function App() 
 {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <ProtectedRoute><Dashboard/></ProtectedRoute>
+    },
+    {
+      path: 'admin-dashboard',
+      element: <ProtectedRoute><AdminDashboard/></ProtectedRoute>
+    },
+    {
+      path: '/login',
+      element: <Login/>
+    },
+    {
+      path: '/transactions',
+      element: <ProtectedRoute><TransactionList/></ProtectedRoute>
+    },
+    {
+      path: '/add-transaction',
+      element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
+    }
+  ]);
     const loginContext = useContext(LoginContext);
 
     useEffect(()=>{
-      const token = localStorage.getItem(tokenNames.accessToken);
-      if(token)
+    const fetchToken = async ()=>
+    {
+        let token = localStorage.getItem(tokenNames.accessToken);
+
+      if(token && checkAccessTokenValidity(token))
       {
-        loginContext.setAuthenticationStatus(true);
         loginContext.setJwt(token);
+        loginContext.setAuthenticationStatus(true);
       }
       else
       {
-        loginContext.setAuthenticationStatus(false);
+        token = await refreshToken();
+        if(token)
+        {
+          localStorage.setItem(tokenNames.accessToken, token);
+          loginContext.setJwt(token);
+          loginContext.setAuthenticationStatus(true);
+        }
+        else
+        {
+          localStorage.removeItem(tokenNames.accessToken);
+          loginContext.setAuthenticationStatus(false);
+        }
       }
+     }
+     fetchToken();    
     },[]);
-
-    const router = createBrowserRouter([
-      {
-        path: '/',
-        element: <ProtectedRoute><Dashboard/></ProtectedRoute>
-      },
-      {
-        path: 'admin-dashboard',
-        element: <ProtectedRoute><AdminDashboard/></ProtectedRoute>
-      },
-      {
-        path: '/login',
-        element: <Login/>
-      },
-      {
-        path: '/transactions',
-        element: <ProtectedRoute><TransactionList/></ProtectedRoute>
-      },
-      {
-        path: '/add-transaction',
-        element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
-      }
-    ]);
 
     return (
       <div>
