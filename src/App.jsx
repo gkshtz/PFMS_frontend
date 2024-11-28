@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import Login from './Components/Login/Login.jsx'
 import TransactionList from './Components/TransactionList/TransactionList.jsx'
@@ -8,13 +8,14 @@ import { LoginContext } from './Contexts/LoginContext.jsx'
 import TransactionForm from './Components/TransactionForm/TransactionForm.jsx'
 import Dashboard from './Components/Dashboard/Dashboard.jsx'
 import AdminDashboard from './Components/AdminDashboard/AdminDashboard.jsx';
+import tokenNames from './Constants/TokenNames.js'
 
 function App() 
 {
     const loginContext = useContext(LoginContext);
 
     useEffect(()=>{
-      const token = localStorage.getItem('jwt-token');
+      const token = localStorage.getItem(tokenNames.accessToken);
       if(token)
       {
         loginContext.setAuthenticationStatus(true);
@@ -24,7 +25,7 @@ function App()
       {
         loginContext.setAuthenticationStatus(false);
       }
-    },[])
+    },[]);
 
     const router = createBrowserRouter([
       {
@@ -47,7 +48,7 @@ function App()
         path: '/add-transaction',
         element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
       }
-    ])
+    ]);
 
     return (
       <div>
@@ -57,5 +58,4 @@ function App()
       </div>
     )
 }
-
 export default App

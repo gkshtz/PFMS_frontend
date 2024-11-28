@@ -2,6 +2,9 @@ import { useContext, useState } from 'react';
 import './Login.css'
 import { LoginContext } from '../../Contexts/LoginContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import errorNames from '../../Constants/ErrorMessages.js';
+import tokenNames from '../../Constants/TokenNames.js';
+
 const Login = ()=>{
     const loginContext = useContext(LoginContext);
     const navigate = useNavigate();
@@ -28,8 +31,20 @@ const Login = ()=>{
             const payload = await response.json();
             loginContext.setAuthenticationStatus(true);
             loginContext.setJwt(payload.responseData);
-            localStorage.setItem('jwt-token', payload.responseData);
+            localStorage.setItem(tokenNames.accessToken, payload.responseData);
             navigate('/transactions');
+        }
+        else if(response.status == 401)
+        {
+            const payload = await response.json();
+            if(payload.errorName === errorNames.INCORRECT_CREDENTIALS)
+            {
+                alert(errorNames.INCORRECT_CREDENTIALS);
+            }
+            else if(payload.errorName == errorNames.USER_NOT_EXIST)
+            {
+                alert(errorNames.USER_NOT_EXIST);
+            }
         }
     }
 
