@@ -17,34 +17,33 @@ const Login = ()=>{
         event.preventDefault();
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        const response = await fetch('http://localhost:5144/api/users/login',{
-            method: 'POST',
-            body: JSON.stringify({
-                email: formData.email,
-                password: formData.password                
-            }),
-            headers: myHeaders
-        });
-
-        if(response.ok)
-        {
-            const payload = await response.json();
-            loginContext.setAuthenticationStatus(true);
-            loginContext.setJwt(payload.responseData);
-            localStorage.setItem(tokenNames.accessToken, payload.responseData);
-            navigate('/transactions');
+        try{
+            const response = await fetch('http://localhost:5144/api/users/login',{
+                method: 'POST',
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password                
+                }),
+                headers: myHeaders
+            });
+    
+            if(response.ok)
+            {
+                const payload = await response.json();
+                loginContext.setAuthenticationStatus(true);
+                loginContext.setJwt(payload.responseData);
+                localStorage.setItem(tokenNames.accessToken, payload.responseData);
+                navigate('/transactions');
+            }
+            else if(response.status == 401)
+            {
+                const payload = await response.json();
+                alert(payload.errorName);
+            }
         }
-        else if(response.status == 401)
+        catch
         {
-            const payload = await response.json();
-            if(payload.errorName === errorNames.INCORRECT_CREDENTIALS)
-            {
-                alert(errorNames.INCORRECT_CREDENTIALS);
-            }
-            else if(payload.errorName == errorNames.USER_NOT_EXIST)
-            {
-                alert(errorNames.USER_NOT_EXIST);
-            }
+            alert(errorNames.SOMETHING_WENT_WRONG)
         }
     }
 
