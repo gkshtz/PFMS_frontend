@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { LoginContext } from '../../Contexts/LoginContext';
 import { checkAccessTokenValidity, refreshToken } from '../../RefreshToken';
 import { useNavigate } from 'react-router-dom';
+import tokenNames from '../../Constants/TokenNames';
 
 export default function TransactionForm() 
 {
@@ -29,6 +30,24 @@ export default function TransactionForm()
     {
         event.preventDefault();
 
+        var token = loginContext.jwt;
+        if(checkAccessTokenValidity(token)==false)
+        {
+            token = await refreshToken();
+            if(token)
+            {
+                loginContext.setJwt(token);
+                localStorage.setItem(tokenNames.accessToken, token);
+            }
+            else
+            {
+                localStorage.removeItem(accessToken);
+                loginContext.setAuthenticationStatus(false);
+                loginContext.setJwt('');
+                navigate('/login');
+            }
+        }
+
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization",`Bearer ${loginContext.jwt}`);
@@ -52,7 +71,6 @@ export default function TransactionForm()
         {
             value = Number(value);
         }
-        console.log(name);
         
         setFormData({
             ...formData,
@@ -90,17 +108,24 @@ export default function TransactionForm()
                 headers: requestHeaders
             })
 
+            const payload = await response.json();
+
             if(response.ok)
             {
-                const payload = await response.json();
                 const data = payload.responseData;
                 return data;
             }
+            else if(response.status == 401)
+            {
+                navigate('/login');
+            }
+            alert(payload.errorName);
+            return null;
         }
         catch
         {
             alert('Something went wrong');
-            return [];
+            return null;
         }
     }
 
@@ -115,13 +140,13 @@ export default function TransactionForm()
             if(token)
             {
                 loginContext.setJwt(token);
-                localStorage.setItem('access-token', token);
+                localStorage.setItem(tokenNames.accessToken, token);
             }
             else
             {
                 loginContext.setAuthenticationStatus(false);
                 loginContext.setJwt('');
-                localStorage.removeItem('access-token');
+                localStorage.removeItem(tokenNames.accessToken);
                 navigate('/login');
             }
         }
@@ -131,9 +156,12 @@ export default function TransactionForm()
             if(!isFetched0)
             {
                 const data = await fetchCategories();
-                setCategories0(data);
-                setCategories(data);
-                setFetched0(true);
+                if(data)
+                {
+                    setCategories0(data);
+                    setCategories(data);
+                    setFetched0(true);
+                }
             }
             else
             {
@@ -145,9 +173,12 @@ export default function TransactionForm()
             if(!isFetched1)
             {
                 const data = await fetchCategories();
-                setCategories1(data);
-                setCategories(data);
-                setFetched1(true);
+                if(data)
+                {
+                    setCategories1(data);
+                    setCategories(data);
+                    setFetched1(true);   
+                }
             }
             else
             {
