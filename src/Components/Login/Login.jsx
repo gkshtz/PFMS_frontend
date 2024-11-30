@@ -20,6 +20,7 @@ const Login = ()=>{
         try{
             const response = await fetch('http://localhost:5144/api/users/login',{
                 method: 'POST',
+                credentials:"include",
                 body: JSON.stringify({
                     email: formData.email,
                     password: formData.password                
@@ -35,10 +36,10 @@ const Login = ()=>{
                 localStorage.setItem(tokenNames.accessToken, payload.responseData);
                 navigate('/transactions');
             }
-            else if(response.status == 401)
+            else
             {
                 const payload = await response.json();
-                alert(payload.errorName);
+                alert(payload.ErrorName);
             }
         }
         catch

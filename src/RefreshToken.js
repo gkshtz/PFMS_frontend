@@ -3,8 +3,12 @@ export async function refreshToken()
 {
     try
     {
-        const response = await fetch('http://localhost:5144/api/users/access-token', {
-            method: 'GET'
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        const response = await fetch('http://localhost:5144/api/users/refreshed-access-token', {
+            method: 'GET',
+            credentials: "include",
+            headers: headers
         })
 
         if(response.ok)
@@ -24,7 +28,7 @@ export function checkAccessTokenValidity(token)
 {
     const { exp } = jwtDecode(token);
     const currentTime = Date.now();
-    if(exp>currentTime)
+    if((exp*1000)>currentTime)
         return true;
     return false;
 }

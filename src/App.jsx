@@ -40,7 +40,7 @@ function App()
     useEffect(()=>{
     const fetchToken = async ()=>
     {
-        let token = localStorage.getItem(tokenNames.accessToken);
+      let token = localStorage.getItem(tokenNames.accessToken);
 
       if(token && checkAccessTokenValidity(token))
       {

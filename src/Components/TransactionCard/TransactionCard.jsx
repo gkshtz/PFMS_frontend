@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import './TransactionCard.css';
 import { LoginContext } from '../../Contexts/LoginContext';
 import { useNavigate } from 'react-router-dom';
+import { checkAccessTokenValidity, refreshToken } from '../../RefreshToken';
 
 export default function TransactionCard(props) 
 {
@@ -41,7 +42,7 @@ export default function TransactionCard(props)
     }
     else
     {
-      const paylaod = await response.json();
+      const payload = await response.json();
       alert(payload.errorName);
     }
   }
