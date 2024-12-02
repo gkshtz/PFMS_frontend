@@ -39,6 +39,17 @@ export default function TransactionCard(props)
     {
       alert('Transaction Deleted Successfully');
       props.setDeletedIndex(props.index);
+
+      if(props.transaction.transactionType == 0)
+      {
+        const {totalExpence, setTotalExpence} = props.totalTransactionAmounts;
+        setTotalExpence(totalExpence - props.transaction.transactionAmount);
+      }
+      else if(props.transaction.transactionType == 1)
+      {
+        const {totalIncome, setTotalIncome} = props.totalTransactionAmounts;
+        setTotalIncome(totalIncome - props.transaction.transactionAmount);
+      }
     }
     else
     {

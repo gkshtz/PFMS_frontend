@@ -1,0 +1,25 @@
+#totalExpence{
+    border: 4px solid grey;
+    background-color: red;
+    color: black;
+    font-weight: bolder;
+    padding: 0.5em;
+    margin: 1em;
+    margin-right: 3em;
+    border-radius: 10px;
+}
+#totalIncome{
+    border: 4px solid grey;
+    background-color: lightgreen;
+    color: black;
+    font-weight: bolder;
+    padding: 0.5em;
+    margin: 1em;
+    margin-left: 3em;
+    border-radius: 10px;
+}
+#totalTransactionAmountContainer{
+    text-align: center;
+    padding: 0.5em;
+    margin: 0.5em;
+}
