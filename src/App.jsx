@@ -10,6 +10,7 @@ import Dashboard from './Components/Dashboard/Dashboard.jsx'
 import AdminDashboard from './Components/AdminDashboard/AdminDashboard.jsx';
 import tokenNames from './Constants/TokenNames.js'
 import { checkAccessTokenValidity , refreshToken} from './RefreshToken.js'
+import UserProfile from './Components/UserProfile/UserProfile.jsx'
 
 function App() 
 {
@@ -33,6 +34,10 @@ function App()
     {
       path: '/add-transaction',
       element: <ProtectedRoute><TransactionForm/></ProtectedRoute>
+    },
+    {
+      path: '/user-profile',
+      element: <ProtectedRoute><UserProfile/></ProtectedRoute>
     }
   ]);
     const loginContext = useContext(LoginContext);

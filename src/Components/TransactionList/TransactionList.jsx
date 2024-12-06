@@ -25,8 +25,8 @@ export default function TransactionList() {
       });
       if(response.ok)
       {
-        const responseData = await response.json();
-        setTransactions(responseData.responseData);
+        const payload = await response.json();
+        setTransactions(payload.responseData);
       }
 
       response = await fetch('http://localhost:5144/api/transactions/total-transaction-amount', {
