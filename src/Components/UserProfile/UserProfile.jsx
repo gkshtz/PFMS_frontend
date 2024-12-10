@@ -25,22 +25,29 @@ export default function UserProfile()
 
     useEffect(()=>{
         const fetchUserData = async ()=>{
-            const response = await fetch('http://localhost/api/users/profile', {
-                method: 'GET',
-                headers: {
-                    Authorization: loginContext.jwt,
-                    "Content-Type": "application/json"
+            try
+            {
+                const response = await fetch('http://localhost/api/users/profile', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: loginContext.jwt,
+                        "Content-Type": "application/json"
+                    }
+                })
+                if(response.ok)
+                {
+                    const payload = await response.json();
+                    setUserData(payload.responseData);
                 }
-            })
-            if(response.ok)
-            {
-                const payload = await response.json();
-                setUserData(payload.responseData);
+                else
+                {
+                    const payload = await response.json();
+                    alert(payload.ErrorName);
+                }
             }
-            else
+            catch
             {
-                const payload = await response.json();
-                alert(payload.ErrorName);
+                alert("Something wen wrong!");
             }
         }
         fetchUserData();
@@ -64,6 +71,11 @@ export default function UserProfile()
         });
     }
 
+    function onSubmit(event)
+    {
+        
+    }
+
     return (
         <div className="formContainer">
       <div id="formTitle">User Profile</div>
@@ -73,28 +85,35 @@ export default function UserProfile()
                 </div>
                 <div>
                     <input type="text" name="firstName" id="firstName" value={userData.firstName} onChange={handleChange} className='inputField' disabled={!isEditable.firstName}></input>
-                    <button name='firstName' onClick={handleClick}>Edit</button>
+                    <button type='button' name='firstName' onClick={handleClick}>Edit</button>
                 </div>
                 <div className='label'>
                     <label htmlFor="lastName">Last Name</label>
                 </div>
                 <div>
                     <input type="text" name="lastName" id="lastName" value={userData.lastName} onChange={handleChange} className='inputField' disabled={!isEditable.lastName}></input>
-                    <button name='lastName' onClick={handleClick}>Edit</button>
-                </div>           
+                    <button type='button' name='lastName' onClick={handleClick}>Edit</button>
+                </div>
+                <div className='label'>
+                    <label htmlFor="email">Email</label>
+                </div>
+                <div>
+                    <input type="text" name="email" id="email" value={userData.email} onChange={handleChange} className='inputField' disabled={!isEditable.email}></input>
+                    <button type='button' name='email' onClick={handleClick}>Edit</button>
+                </div>
                 <div className='label'>
                     <label htmlFor="age">Age</label>
                 </div>
                 <div>
                     <input type="number" name="age" id="age" value={userData.age} onChange={handleChange} className='inputField' disabled={!isEditable.age}></input>
-                    <button name='age' onClick={handleClick}>Edit</button>
+                    <button type='button' name='age' onClick={handleClick}>Edit</button>
                 </div>
                 <div className='label'>
                     <label htmlFor="city">City</label>
                 </div>
                 <div>
                     <input type="text" name="city" id="city" value={userData.city} onChange={handleChange} className='inputField' disabled={!isEditable.city}></input>
-                    <button name='city' onClick={handleClick}>Edit</button>
+                    <button type='button' name='city' onClick={handleClick}>Edit</button>
                 </div>           
 
                 <input type="submit" value="Submit" id='submit'></input>
