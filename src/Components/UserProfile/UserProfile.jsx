@@ -27,10 +27,10 @@ export default function UserProfile()
         const fetchUserData = async ()=>{
             try
             {
-                const response = await fetch('http://localhost/api/users/profile', {
+                const response = await fetch('http://localhost:5144/api/users/profile', {
                     method: 'GET',
                     headers: {
-                        Authorization: loginContext.jwt,
+                        Authorization: `Bearer ${loginContext.jwt}`,
                         "Content-Type": "application/json"
                     }
                 })
