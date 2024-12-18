@@ -2,7 +2,7 @@
     margin: auto;
     width: 40vw; 
     text-align: center;
-    margin-top: 10em;
+    margin-top: 5em;
     padding-top: 8vh;
     border: 5px solid black;
     border-radius: 12px;
@@ -23,6 +23,8 @@
     font-family: cursive;
 }
 .inputField{
+    background-color: white;
+    color: black;
     margin: 3px;
     border: 2px solid black;
     width: 20em;

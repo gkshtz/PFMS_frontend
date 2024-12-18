@@ -58,6 +58,7 @@ export default function TransactionList() {
   return (
     <div>   
       <button id='addTransactionBtn' onClick={()=>{navigate('/add-transaction')}}>Add Transaction</button>
+      <button id='userProfile' onClick={()=>{navigate('/user-profile')}}>Profile</button>
       <div id='totalTransactionAmountContainer'>
         <span id='totalExpence'>{totalExpence}</span>
         <span id='totalIncome'>{totalIncome}</span>

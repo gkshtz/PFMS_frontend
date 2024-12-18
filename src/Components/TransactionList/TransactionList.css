@@ -23,3 +23,15 @@
     padding: 0.5em;
     margin: 0.5em;
 }
+#userProfile{
+    background-color: aqua;
+    border-radius: 1em;
+    border: 0.2em solid blue;
+    margin: 1em;
+}
+#addTransactionBtn{
+    background-color: yellow;
+    border-radius: 1em;
+    border: 0.2em solid orangered;
+    margin: 1em;
+}

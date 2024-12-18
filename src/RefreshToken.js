@@ -5,7 +5,7 @@ export async function refreshToken()
     {
         const headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        const response = await fetch('http://localhost:5144/api/users/refreshed-access-token', {
+        const response = await fetch('http://localhost:5144/api/users/refresh-token/refresh', {
             method: 'GET',
             credentials: "include",
             headers: headers
