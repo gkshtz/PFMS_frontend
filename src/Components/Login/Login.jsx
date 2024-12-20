@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 import './Login.css'
 import { LoginContext } from '../../Contexts/LoginContext.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import errorNames from '../../Constants/ErrorMessages.js';
 import tokenNames from '../../Constants/TokenNames.js';
+import SendOtpModal from '../SendOtpModal/SendOtpModal.jsx';
 
 const Login = ()=>{
     const loginContext = useContext(LoginContext);
@@ -12,6 +13,8 @@ const Login = ()=>{
         email: '',
         password: ''
     })
+
+    const [isModalOpen, setModalOpen] = useState(false);
     async function submitForm(event)
     {
         event.preventDefault();
@@ -74,6 +77,8 @@ const Login = ()=>{
                 </div>           
                 <input type="submit" value="Submit" id='submit'></input>
             </form>
+            <Link to="#" onClick={()=>{setModalOpen(true)}}>Forgot Password?</Link>
+            <SendOtpModal isModalOpen={isModalOpen} setModalOpen={setModalOpen}></SendOtpModal>
        </div>
     )
 }
