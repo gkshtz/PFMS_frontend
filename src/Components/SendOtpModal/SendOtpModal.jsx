@@ -5,6 +5,7 @@ import tokenNames from '../../Constants/TokenNames';
 import { checkAccessTokenValidity, refreshToken } from '../../RefreshToken';
 import { LoginContext } from '../../Contexts/LoginContext';
 import './Modal.css';
+import { useEffect } from 'react';
 
 export default function SendOtpModal({isModalOpen, setModalOpen}) 
 {
@@ -15,6 +16,11 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
 
     const [canSendOtp, setCanSendOtp] = useState(true);
     const [timer, setTimer] = useState(0);
+    const [isOtpSent, setOtpSent] = useState(false);
+
+    useEffect(()=>{
+        setOtpSent(false);
+    }, [isModalOpen])
 
     const onChange = (event)=>{
         setEmailData({
@@ -31,7 +37,6 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
         setTimer(30);
         setCanSendOtp(false);
         try{
-
             const countdownId = setInterval(()=>{
                 setTimer((prev)=>{
                     if(prev<=1)
@@ -58,6 +63,7 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             })
             if(response.ok)
             {
+                setOtpSent(true);
                 alert("OTP send!");
             }
             else
@@ -82,14 +88,21 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
         <div className="modalContent">
             <h2>Forgot Password</h2>
             <form onSubmit={onSubmit}>
-                <label htmlFor="forgotEmail">Enter your email:</label>
+                <label htmlFor="forgotEmail">Enter your email:</label><br/>
                 <input type="email" id="forgotEmail" name="email" onChange={onChange} required />
                 <div className="modalActions">
-                    <button type="submit" disabled={!canSendOtp}>Send OTP</button>
-                    <button type="button" onClick={onClose}>Cancel</button>
+                    <button type="submit" id='sendBtn' disabled={!canSendOtp}>Send OTP</button>
+                    <button type="button" id='cancelBtn' onClick={onClose}>Cancel</button>
                     <div>{!canSendOtp?`Resend OTP in ${timer} seconds.`: null}</div>
                 </div>
             </form>
+            {isOtpSent ?
+                <form>
+                    <label htmlFor='otp'>Enter OTP:</label><br/>
+                    <input type="number" name='otp' id='otp' required/><br/>
+                    <input type="submit" id='otpSubmit'/>
+                </form> : null
+            }  
         </div>
         </div> :  null
     }
