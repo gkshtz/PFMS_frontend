@@ -17,6 +17,7 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
     const [canSendOtp, setCanSendOtp] = useState(true);
     const [timer, setTimer] = useState(0);
     const [isOtpSent, setOtpSent] = useState(false);
+    const [otp, setOtp] = useState("");
 
     useEffect(()=>{
         setOtpSent(false);
@@ -81,6 +82,45 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             alert("Something went wrong!");
         }
     }
+
+    async function onOtpSubmit(event)
+    {
+        event.preventDefault();
+        try
+        {
+            const body = {
+                emailAddress: emailData.emailAddress,
+                otp: otp
+            }
+            const headers = new Headers();
+            headers.append("Content-Type", "application/json");
+            const response = await fetch('http://localhost:5144/api/users/otp/verify', {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: headers,
+                credentials: "include"
+            })
+            if(response.ok)
+            {
+                alert("otp verified!");
+            }
+            else
+            {
+                const payload = await response.json();
+                alert(payload.ErrorName);
+            }
+        }
+        catch
+        {
+            alert("Something went wrong!");
+        }
+    }   
+
+    function onOtpChange(event)
+    {
+        setOtp(event.target.value);
+    }
+
   return (<div>
     {
         isModalOpen ? 
@@ -97,9 +137,9 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
                 </div>
             </form>
             {isOtpSent ?
-                <form>
+                <form onSubmit={onOtpSubmit}>
                     <label htmlFor='otp'>Enter OTP:</label><br/>
-                    <input type="number" name='otp' id='otp' required/><br/>
+                    <input type="number" name='otp' id='otp' onChange={onOtpChange} required/><br/>
                     <input type="submit" id='otpSubmit'/>
                 </form> : null
             }  
