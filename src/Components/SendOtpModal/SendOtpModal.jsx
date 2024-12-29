@@ -95,7 +95,7 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             const headers = new Headers();
             headers.append("Content-Type", "application/json");
             const response = await fetch('http://localhost:5144/api/users/otp/verify', {
-                method: "POST",
+                method: "PATCH",
                 body: JSON.stringify(body),
                 headers: headers,
                 credentials: "include"
@@ -103,6 +103,7 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             if(response.ok)
             {
                 alert("otp verified!");
+                setModalOpen(false);
             }
             else
             {
