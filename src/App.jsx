@@ -11,6 +11,7 @@ import AdminDashboard from './Components/AdminDashboard/AdminDashboard.jsx';
 import tokenNames from './Constants/TokenNames.js'
 import { checkAccessTokenValidity , refreshToken} from './RefreshToken.js'
 import UserProfile from './Components/UserProfile/UserProfile.jsx'
+import SetNewPassword from './Components/SetNewPassword/SetNewPassword'
 
 function App() 
 {
@@ -38,6 +39,10 @@ function App()
     {
       path: '/user-profile',
       element: <ProtectedRoute><UserProfile/></ProtectedRoute>
+    },
+    {
+      path: '/set-new-password',
+      element: <ProtectedRoute><SetNewPassword/></ProtectedRoute>
     }
   ]);
     const loginContext = useContext(LoginContext);

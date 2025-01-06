@@ -6,6 +6,7 @@ import { checkAccessTokenValidity, refreshToken } from '../../RefreshToken';
 import { LoginContext } from '../../Contexts/LoginContext';
 import './Modal.css';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SendOtpModal({isModalOpen, setModalOpen}) 
 {
@@ -18,6 +19,8 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
     const [timer, setTimer] = useState(0);
     const [isOtpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState("");
+    const loginContext = useContext(LoginContext);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         setOtpSent(false);
@@ -65,7 +68,7 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             if(response.ok)
             {
                 setOtpSent(true);
-                alert("OTP send!");
+                alert("OTP sent!");
             }
             else
             {
@@ -104,6 +107,8 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
             {
                 alert("otp verified!");
                 setModalOpen(false);
+                loginContext.setAuthenticationStatus(true);
+                navigate("/set-new-password");
             }
             else
             {
