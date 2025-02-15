@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import './Login.css'
+// import './Login.css'
 import { LoginContext } from '../../Contexts/LoginContext.jsx';
 import { useNavigate, Link } from 'react-router-dom';
 import errorNames from '../../Constants/ErrorMessages.js';
@@ -60,24 +60,21 @@ const Login = ()=>{
     };
 
     return (
-       <div className="formContainer">
-            <div id="formTitle">Login</div>
+       <div className="mx-2 formContainer">
+            <div className="text-center fw-bold fs-3">Login</div>
             <form onSubmit={submitForm}>
-                <div className='label'>
-                    <label htmlFor="email">Enter Your Email Address</label>
+                <div className='mb-3 label'>
+                    <label className='form-label' htmlFor="email">Enter Your Email Address</label>
+                    <input type="text" className='form-control inputField' name="email" id="email" value={formData.email} onChange={handleChange}></input>
+                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
-                <div>
-                    <input type="text" name="email" id="email" value={formData.email} onChange={handleChange} className='inputField'></input>
-                </div>
-                <div className='label'>
-                    <label htmlFor="password">Enter Your Password</label>
-                </div>
-                <div>
-                    <input type="text" name="password" id="password" value={formData.password} onChange={handleChange} className='inputField'></input>
+                <div className='mb-3 label'>
+                    <label className='form-label' htmlFor="password">Enter Your Password</label>
+                    <input className='form-control inputField' type="text" name="password" id="password" value={formData.password} onChange={handleChange}></input>
                 </div>           
-                <input type="submit" value="Submit" id='submit'></input>
+                <input type="submit" className='btn btn-success' value="Submit"></input>
             </form>
-            <Link to="#" onClick={()=>{setModalOpen(true)}}>Forgot Password?</Link>
+            <Link to="#" className='link-opacity-25-hover link-secondary' onClick={()=>{setModalOpen(true)}}>Forgot Password?</Link>
             <SendOtpModal isModalOpen={isModalOpen} setModalOpen={setModalOpen}></SendOtpModal>
        </div>
     )
