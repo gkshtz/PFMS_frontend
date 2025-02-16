@@ -8,8 +8,7 @@ import './Modal.css';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function SendOtpModal({isModalOpen, setModalOpen}) 
-{
+export default function SendOtpModal({ isModalOpen, setModalOpen }) {
     const initialData = {
         emailAddress: ""
     }
@@ -22,36 +21,34 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
     const loginContext = useContext(LoginContext);
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         setOtpSent(false);
     }, [isModalOpen])
 
-    const onChange = (event)=>{
+    const onChange = (event) => {
         setEmailData({
-            emailAddress: event.target.value
+            "emailAddress": event.target.value
         });
     }
 
-    const onClose = ()=>{
+    const onClose = () => {
         setModalOpen(false);
     }
 
-    const onSubmit = async (event)=>{
+    const onSubmit = async (event) => {
         event.preventDefault();
         setTimer(30);
         setCanSendOtp(false);
-        try{
-            const countdownId = setInterval(()=>{
-                setTimer((prev)=>{
-                    if(prev<=1)
-                    {
+        try {
+            const countdownId = setInterval(() => {
+                setTimer((prev) => {
+                    if (prev <= 1) {
                         clearInterval(countdownId);
                         setCanSendOtp(true);
                         return 0;
                     }
-                    else
-                    {
-                        return prev-1;
+                    else {
+                        return prev - 1;
                     }
                 })
             }, 1000)
@@ -65,13 +62,11 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
                 headers: headers,
                 credentials: "include"
             })
-            if(response.ok)
-            {
+            if (response.ok) {
                 setOtpSent(true);
                 alert("OTP sent!");
             }
-            else
-            {
+            else {
                 setTimer(0);
                 setCanSendOtp(true);
                 const payload = await response.json();
@@ -86,11 +81,9 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
         }
     }
 
-    async function onOtpSubmit(event)
-    {
+    async function onOtpSubmit(event) {
         event.preventDefault();
-        try
-        {
+        try {
             const body = {
                 emailAddress: emailData.emailAddress,
                 otp: otp
@@ -103,15 +96,13 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
                 headers: headers,
                 credentials: "include"
             })
-            if(response.ok)
-            {
+            if (response.ok) {
                 alert("otp verified!");
                 setModalOpen(false);
                 loginContext.setAuthenticationStatus(true);
                 navigate("/set-new-password");
             }
-            else
-            {
+            else {
                 const payload = await response.json();
                 alert(payload.ErrorName);
             }
@@ -120,38 +111,47 @@ export default function SendOtpModal({isModalOpen, setModalOpen})
         {
             alert("Something went wrong!");
         }
-    }   
+    }
 
-    function onOtpChange(event)
-    {
+    function onOtpChange(event) {
         setOtp(event.target.value);
     }
 
-  return (<div>
-    {
-        isModalOpen ? 
-        <div className="modalOverlay">
-        <div className="modalContent">
-            <h2>Forgot Password</h2>
-            <form onSubmit={onSubmit}>
-                <label htmlFor="forgotEmail">Enter your email:</label><br/>
-                <input type="email" id="forgotEmail" name="email" onChange={onChange} required />
-                <div className="modalActions">
-                    <button type="submit" id='sendBtn' disabled={!canSendOtp}>Send OTP</button>
-                    <button type="button" id='cancelBtn' onClick={onClose}>Cancel</button>
-                    <div>{!canSendOtp?`Resend OTP in ${timer} seconds.`: null}</div>
+    return (<div>
+        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="staticBackdropLabel">Forgot Password</h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        <form>
+                            <div className="mb-3">
+                                <label htmlFor="emailAddress" className="form-label">Email address</label>
+                                <input type="email" name='emailAddress' onChange={onChange} className="form-control" id="emailAddress" aria-describedby="emailHelp" />
+                            </div>
+                        </form>
+                        {
+                            
+                            isOtpSent?
+                                <form onSubmit={onOtpSubmit}>
+                                    <label htmlFor='otp' className='form-label'>Enter OTP</label><br />
+                                    <input type="number" className='form-control' name='otp' onChange={onOtpChange} required /><br />
+                                    <input type="submit" className='btn btn-success' />
+                                </form>:null 
+                        }
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={onClose}>Close</button>
+                        {canSendOtp ?
+                            <button type="button" className="btn btn-primary" onClick={onSubmit}>Send OTP</button>
+                            : <button type="button" className="btn btn-primary" disabled>{timer}</button>
+                        }
+                    </div>
                 </div>
-            </form>
-            {isOtpSent ?
-                <form onSubmit={onOtpSubmit}>
-                    <label htmlFor='otp'>Enter OTP:</label><br/>
-                    <input type="number" name='otp' id='otp' onChange={onOtpChange} required/><br/>
-                    <input type="submit" id='otpSubmit'/>
-                </form> : null
-            }  
+            </div>
         </div>
-        </div> :  null
-    }
-    </div>
-  )
+    </div>)
+
 }
