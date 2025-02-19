@@ -1,48 +1,45 @@
 import React from 'react'
 import { useState } from 'react'
 
-export default function SetNewPassword() 
-{
+export default function SetNewPassword() {
     const initialData = {
-        newPassword:"",
-        reEnterPassword:""
+        newPassword: "",
+        reEnterPassword: ""
     }
 
     const [formData, setFormData] = useState(initialData);
+    const [passwordMatch, setPasswordMatch] = useState(true);
 
-    const onChange = async (event)=>{
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    }
-    async function submitForm(event)
-    {
+    async function submitForm(event) {
         //login for HTTP request to API
     }
 
-  return (
-    <div>
-      <div className="formContainer">
-            <div id="formTitle">Login</div>
-            <form onSubmit={submitForm}>
-                <div className='label'>
-                    <label htmlFor="newPassword">Enter New Password</label>
-                </div>
-                <div>
-                    <input type="text" name="newPassword" id="newPassword" value={formData.newPassword} onChange={onChange} className='inputField'></input>
-                </div>
-                <div className='label'>
-                    <label htmlFor="reEnterPassword">Re Enter New Password</label>
-                </div>
-                <div>
-                    <input type="text" name="reEnterPassword" id="reEnterPassword" value={formData.reEnterPassword} 
-                    onChange={onChange} className='inputField'></input>
-                </div>           
-                <input type="submit" value="Submit" id='submit'></input>
-            </form>
-       </div>
-    </div>
-  )
+   function onChange(event)
+   {
+        const {name, value} = event.target;
+        setFormData((prev)=>{
+            const updatedFormData = {
+                ...prev,
+                [name]: value
+            }
+            setPasswordMatch(updatedFormData.newPassword == updatedFormData.reEnterPassword);
+            return updatedFormData;
+        })
+   }
+
+    return (
+        <form className='m-4'>
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">Enter New Pasword</label>
+                <input type="password" class="form-control" name='newPassword' id="newPassword" onChange={onChange}/>
+                    <div id="passwordHelp" class="form-text text-danger" hidden={passwordMatch}>Password are not same!</div>
+            </div>
+            <div class="mb-3">
+                <label for="reEnterPassword" class="form-label">Re Enter Password</label>
+                <input type="password" class="form-control" name='reEnterPassword' id="reEnterPassword" onChange={onChange}/>
+            </div>
+            <button type="submit" class="btn btn-primary" disabled = {!passwordMatch}>Submit</button>
+        </form>
+    )
 }
+ 

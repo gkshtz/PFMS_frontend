@@ -123,7 +123,7 @@ export default function SendOtpModal({ isModalOpen, setModalOpen }) {
                 <div className="modal-content">
                     <div className="modal-header">
                         <h1 className="modal-title fs-5" id="staticBackdropLabel">Forgot Password</h1>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
                         <form>
@@ -138,7 +138,7 @@ export default function SendOtpModal({ isModalOpen, setModalOpen }) {
                                 <form onSubmit={onOtpSubmit}>
                                     <label htmlFor='otp' className='form-label'>Enter OTP</label><br />
                                     <input type="number" className='form-control' name='otp' onChange={onOtpChange} required /><br />
-                                    <input type="submit" className='btn btn-success' />
+                                    <input type="submit" className='btn btn-success' data-bs-dismiss="modal" onClick={onClose}/>
                                 </form>:null 
                         }
                     </div>

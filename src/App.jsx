@@ -42,7 +42,7 @@ function App()
     },
     {
       path: '/set-new-password',
-      element: <ProtectedRoute><SetNewPassword/></ProtectedRoute>
+      element: <SetNewPassword/>
     }
   ]);
     const loginContext = useContext(LoginContext);
